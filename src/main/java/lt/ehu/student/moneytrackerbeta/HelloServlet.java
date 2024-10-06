@@ -14,10 +14,6 @@ public class HelloServlet extends HttpServlet {
 
     public void init() {
         message = "Hello World!";
-        System.out.println("user.dir: " + System.getProperty("user.dir"));
-        System.out.println("java.io.tmpdir: " + System.getProperty("java.io.tmpdir"));
-
-        logger.info("Using directory: {}", System.getProperty("user.dir"));
         logger.info("Servlet initialized with message: {}", message);
     }
 
