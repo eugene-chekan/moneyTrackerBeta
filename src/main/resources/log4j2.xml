@@ -3,17 +3,18 @@
     <Properties>
         <Property name="DATE">${date:yyyy-MM-dd}</Property>
         <Property name="BASE_PATH">${sys:catalina.home}/webapps/MoneyTrackerBeta</Property>
-        <Property name="LOG_MSG_PATTERN">%d{YYYY-mm-dd HH:MM:ss} [%-25t] [%-5level] %c{26} - %msg%n</Property>
+        <Property name="STDOUT_LOG_MSG_PATTERN">%d{HH:MM:ss} [%-5level] %logger{2} - %msg%n</Property>
+        <Property name="FILE_LOG_MSG_PATTERN">%d{YYYY-mm-dd HH:MM:ss} [%-25t] [%-5level] %logger{5} - %msg%n</Property>
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="${LOG_MSG_PATTERN}"/>
+            <PatternLayout pattern="${STDOUT_LOG_MSG_PATTERN}"/>
         </Console>
         <File name="File"
               fileName="${BASE_PATH}/logs/${DATE}-moneyTracker.log"
               createOnDemand="true"
               append="true">
-            <PatternLayout pattern="${LOG_MSG_PATTERN}"/>
+            <PatternLayout pattern="${FILE_LOG_MSG_PATTERN}"/>
         </File>
     </Appenders>
     <Loggers>
