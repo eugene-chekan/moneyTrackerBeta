@@ -38,7 +38,7 @@ public class UserDao {
         return users;
     }
 
-    public User getUserByLogin(String login) throws IOException, SQLException {
+    public static User getUserByLogin(String login) throws IOException, SQLException {
         logger.debug("Current working directory: {}", System.getProperty("user.dir"));
         // Implement the logic to retrieve a user by login from the database
         // Return a User object

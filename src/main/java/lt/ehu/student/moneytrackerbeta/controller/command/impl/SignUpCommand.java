@@ -15,6 +15,7 @@ public class SignUpCommand implements Command {
         UserService userService = new UserServiceImpl();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
         String firstName = request.getParameter("firstName");
         String lastName = request.getParameter("lastName");
         String email = request.getParameter("email");
@@ -22,13 +23,14 @@ public class SignUpCommand implements Command {
             request.setAttribute("errorUserNameTaken", "Username is already taken. Try a different one.");
             return "pages/signup.jsp";
         }
+        if (!password.equals(confirmPassword)) {
+            request.setAttribute("errorPasswordMismatch", "Passwords do not match.");
+            return "pages/signup.jsp";
+        }
         userService.registerUser(username, password, firstName, lastName, email);
         request.setAttribute("successMessage", "Registration successful. You'll be redirected to login.");
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            return "pages/login.jsp";
-        }
-        return "pages/login.jsp";
+        request.setAttribute("firstName", firstName);
+
+        return "pages/signup_success.jsp";
     }
 }

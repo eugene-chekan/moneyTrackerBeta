@@ -10,8 +10,13 @@ import java.sql.SQLException;
 
 public class UserServiceImpl implements UserService {
     @Override
-    public boolean verifyLogin(String username, String password) {
-        return username.equals("admin") && password.equals("admin");
+    public boolean verifyLogin(String username, String password) throws SQLException, IOException {
+        User user = UserDao.getUserByLogin(username);
+        if (user == null) {
+            return false;
+        }
+        // Verify the password using the PasswordUtil class
+        return PasswordUtil.checkPassword(password, user.getPassword());
     }
 
     @Override

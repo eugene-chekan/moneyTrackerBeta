@@ -8,10 +8,14 @@ import lt.ehu.student.moneytrackerbeta.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 
 public class LoginCommand implements Command {
     @Override
-    public String execute(HttpServletRequest request) throws ServletException, IOException {
+    public String execute(HttpServletRequest request) throws ServletException, IOException, SQLException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM dd yyyy");
+        String date = dateFormat.format(new java.util.Date());
         UserService userService  = new UserServiceImpl();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -20,7 +24,7 @@ public class LoginCommand implements Command {
             BigDecimal income = new BigDecimal("100.99");
             BigDecimal expense = new BigDecimal("51.23");
             request.setAttribute("userName", username);
-            request.setAttribute("currentDate", new java.util.Date());
+            request.setAttribute("currentDate", date);
             request.setAttribute("income", income);
             request.setAttribute("expense", expense);
             request.setAttribute("balance", income.subtract(expense));

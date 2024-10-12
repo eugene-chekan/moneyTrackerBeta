@@ -63,6 +63,9 @@
         .signup-link a:hover {
             text-decoration: underline;
         }
+        .error-message {
+            color: #ff7f7f;
+        }
     </style>
 </head>
 <body>
@@ -77,9 +80,9 @@
             <input type="password" name="password" placeholder="Password" required>
             <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
             <button type="submit">Sign Up</button><br/>
-
-            <div style="color: red;">${errorUserNameTaken}</div><br/>
-            <div style="color: black;">${successMessage}</div><br/>
+        <div class="error-message">
+            ${errorUserNameTaken}${errorPasswordMismatch}
+        </div>
         </form>
         <div class="signup-link">
             <p>Already have an account? <a href="${pageContext.request.contextPath}/index.jsp">Login</a></p>
