@@ -93,7 +93,7 @@
 
     <button onclick="location.href='addTransaction.jsp'">Add Transaction</button>
     <br/><br/>
-    <a class="logout" href="controller?command=logout">Logout</a>
+    <a class="logout" href="${pageContext.request.contextPath}?command=logout">Logout</a>
 </div>
 </body>
 </html>

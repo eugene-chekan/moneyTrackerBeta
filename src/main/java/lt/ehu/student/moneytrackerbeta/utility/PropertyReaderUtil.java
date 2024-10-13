@@ -9,16 +9,14 @@ import java.util.Properties;
 public class PropertyReaderUtil {
     private static final Logger logger = LogManager.getLogger(PropertyReaderUtil.class);
 
-    public static Properties readProperties(String fileName) throws IOException {
+    public static Properties readProperties(String fileName) {
         Properties properties = new Properties();
         try (FileReader reader = new FileReader(fileName)) {
             properties.load(reader);
-            logger.info("{} property file loaded.", fileName);
-        } catch (FileNotFoundException ex) {
+            logger.info("Property file loaded from: {}", fileName);
+        } catch (IOException ex) {
             logger.error("Property file {} not found.", fileName);
-            throw new FileNotFoundException(ex.getMessage());
         }
         return properties;
     }
 }
-

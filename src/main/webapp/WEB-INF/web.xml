@@ -10,4 +10,12 @@
     <listener>
         <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
     </listener>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/pages/errors/404.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/pages/errors/500.jsp</location>
+    </error-page>
 </web-app>
