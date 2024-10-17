@@ -1,19 +1,22 @@
 package lt.ehu.student.moneytrackerbeta.connection;
 
-import lt.ehu.student.moneytrackerbeta.utility.PropertyReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.file.Path;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class ConnectionPool {
+    private static final Lock  lock = new ReentrantLock();
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
     private static final int CONNECTION_POOL_CAPACITY = 2;
     private static ConnectionPool instance;
@@ -29,8 +32,13 @@ public class ConnectionPool {
     }
 
     private ConnectionPool() {
-        Path configPath = Path.of(System.getenv("CATALINA_HOME"), "webapps", "moneyTrackerBeta", "db.properties");
-        Properties props = PropertyReaderUtil.readProperties(configPath.toString());
+        Properties props = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("db.properties")) {
+            props.load(input);
+        } catch (IOException e) {
+            logger.error("Failed to load properties.", e);
+            throw new RuntimeException("Failed to load properties.", e);
+        }
         final String URL = constructUrl(props);
         Connection connection = null;
         for (int i = 0; i < CONNECTION_POOL_CAPACITY; i++) {
@@ -50,9 +58,14 @@ public class ConnectionPool {
     }
 
     public static ConnectionPool getInstance() {
-        if (instance == null) {
-            instance = new ConnectionPool();
-            logger.debug("Connection pool created.");
+        lock.lock();
+        try {
+            if (instance == null) {
+                instance = new ConnectionPool();
+                logger.debug("Connection pool created.");
+            }
+        } finally {
+            lock.unlock();
         }
         logger.debug("Existing connection pool returned.");
         return instance;
@@ -76,7 +89,9 @@ public class ConnectionPool {
 
     public void releaseConnection(Connection connection) {
         try {
-            usedConnections.remove(connection);
+            if (!usedConnections.remove(connection)) {
+                logger.warn("Connection not found in the used connections queue.");
+            }
             logger.debug("Connection removed from the used connections queue.");
             freeConnections.put(connection);
             logger.debug(

@@ -1,12 +1,10 @@
 package lt.ehu.student.moneytrackerbeta.controller.command;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.sql.SQLException;
+import lt.ehu.student.moneytrackerbeta.exception.CommandException;
 
 @FunctionalInterface
 public interface Command {
-    String execute(HttpServletRequest request) throws ServletException, IOException, SQLException;
+    String execute(HttpServletRequest request) throws CommandException;
     default void refresh() {};
 }

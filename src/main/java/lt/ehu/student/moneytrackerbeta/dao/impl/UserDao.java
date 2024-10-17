@@ -2,6 +2,7 @@ package lt.ehu.student.moneytrackerbeta.dao.impl;
 
 import lt.ehu.student.moneytrackerbeta.connection.ConnectionPool;
 import lt.ehu.student.moneytrackerbeta.dao.BaseDao;
+import lt.ehu.student.moneytrackerbeta.exception.DaoException;
 import lt.ehu.student.moneytrackerbeta.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,17 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao implements BaseDao<User> {
-    private static final String SELECT_ALL_USERS = "SELECT * FROM users";
-    private static final String SELECT_USER_BY_LOGIN = "SELECT * FROM users WHERE login = ?";
-    private static final String INSERT_USER = "INSERT INTO users (login, password, email, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL_USERS = "SELECT * FROM public.user";
+    private static final String SELECT_USER_BY_LOGIN = "SELECT * FROM public.user WHERE login = ?";
+    private static final String INSERT_USER = "INSERT INTO public.user (login, password, email, first_name, last_name) VALUES (?, ?, ?, ?, ?)";
     private static final Logger logger = LogManager.getLogger(UserDao.class);
 
-    public List<User> findAll() throws SQLException {
+    public List<User> findAll() throws DaoException {
         List<User> users = new ArrayList<>();
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         Connection connection = null;
-        // Implement the logic to retrieve all users from the database
-        // Return a list of User objects
         try {
             connection = ConnectionPool.getInstance().getConnection();
             statement = connection.prepareStatement(SELECT_ALL_USERS);
@@ -39,10 +38,8 @@ public class UserDao implements BaseDao<User> {
             }
         } catch (SQLException e) {
             logger.error("Error while retrieving users from the database", e);
+            throw new DaoException("Error while retrieving users from the database", e);
         } finally {
-            if (statement != null) {
-                statement.close();
-            }
             if (connection != null) {
                 ConnectionPool.getInstance().releaseConnection(connection);
             }
@@ -51,15 +48,13 @@ public class UserDao implements BaseDao<User> {
     }
 
     @Override
-    public User findById(int id) {
-        return null;
+    public User findById(int id) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Finding user by ID is not supported yet.");
     }
 
-    public User findByLogin(String login) throws SQLException {
-        // Implement the logic to retrieve a user by login from the database
-        // Return a User object
-        PreparedStatement statement = null;
+    public User findByLogin(String login) throws DaoException {
         Connection connection = null;
+        PreparedStatement statement;
         try {
             connection = ConnectionPool.getInstance().getConnection();
             statement = connection.prepareStatement(SELECT_USER_BY_LOGIN);
@@ -76,10 +71,8 @@ public class UserDao implements BaseDao<User> {
             }
         } catch (SQLException e) {
             logger.error("Error while retrieving a user by login from the database", e);
+            throw new DaoException("Error while retrieving a user by login from the database", e);
         } finally {
-            if (statement != null) {
-                statement.close();
-            }
             if (connection != null) {
                 ConnectionPool.getInstance().releaseConnection(connection);
             }
@@ -87,11 +80,10 @@ public class UserDao implements BaseDao<User> {
         return null;
     }
 
-    public boolean create(User user) throws SQLException {
+    public boolean create(User user) throws DaoException {
         logger.info("Creating user: {}", user.getLogin());
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         Connection connection = null;
-        // Implement the logic to add a user to the database
         try {
             connection = ConnectionPool.getInstance().getConnection();
             statement = connection.prepareStatement(INSERT_USER);
@@ -105,15 +97,12 @@ public class UserDao implements BaseDao<User> {
             return true;
         } catch (SQLException e) {
             logger.error("Error while adding a user to the database", e);
+            throw new DaoException("Error while adding a user to the database", e);
         } finally {
-            if (statement != null) {
-                statement.close();
-            }
             if (connection != null) {
                 ConnectionPool.getInstance().releaseConnection(connection);
             }
         }
-        return false;
     }
 
     @Override

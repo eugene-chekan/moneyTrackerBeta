@@ -1,13 +1,14 @@
 package lt.ehu.student.moneytrackerbeta.dao;
 
-import java.io.IOException;
+import lt.ehu.student.moneytrackerbeta.exception.DaoException;
+
 import java.sql.SQLException;
 import java.util.List;
 
-public interface BaseDao<M> {
-    boolean create(M m) throws Exception;
-    boolean update(M m) throws Exception;
-    boolean delete(M m) throws Exception;
-    List<M> findAll() throws SQLException, IOException;
-    M findById(int id) throws SQLException, IOException;
+public interface BaseDao<T> {
+    boolean create(T t) throws DaoException, SQLException;
+    boolean update(T t) throws DaoException;
+    boolean delete(T t) throws DaoException;
+    List<T> findAll() throws DaoException, SQLException;
+    T findById(int id) throws DaoException;
 }

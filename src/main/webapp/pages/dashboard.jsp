@@ -22,6 +22,22 @@
             margin: 50px auto;
             text-align: center;
         }
+        .assets-row {
+            display: flex;
+            max-width: 700px;
+            justify-content: space-between; /* Spreads the assets evenly */
+            margin-bottom: 1.5rem;
+        }
+        .assets-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex: 1; /* Makes all rectangles the same size */
+            max-width: 20%; /* Adjusts size to fit 4 rectangles in one row */
+            margin: 1rem;
+            text-align: center;
+        }
         h1 {
             color: #333;
         }
@@ -71,7 +87,12 @@
 <div class="dashboard-container">
     <h1>Welcome, ${userName}!</h1>
     <div class="date">Today: ${currentDate}</div>
-
+    <div class="assets-row">
+        <c:forEach var="asset" items="${assets}">
+            <div class="assets-container">${asset.name} (${asset.currentBalance})</div>
+            Asset here
+        </c:forEach>
+    </div>
     <div class="report">
         <p>This month income: $${income}</p>
         <p>This month expense: $${expense}</p>

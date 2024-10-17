@@ -77,7 +77,9 @@
         <input type="password" name="password" placeholder="Password" required>
         <button type="submit">Login</button><br/>
         <div class="error-message">
-            ${errorUserPassMessage}${wrongActionMessage}
+            ${errorUserPassMessage}
+            ${wrongActionMessage}
+            ${errorMessage}
         </div>
     </form>
     <div class="signup-link">

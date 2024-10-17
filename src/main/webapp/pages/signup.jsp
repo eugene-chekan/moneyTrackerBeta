@@ -78,10 +78,10 @@
             <input type="text" name="lastName" placeholder="Last name" required>
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
-            <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+            <input type="password" name="confirmPassword" placeholder="Confirm Password" required checked>
             <button type="submit">Sign Up</button><br/>
         <div class="error-message">
-            ${errorUserNameTaken}${errorPasswordMismatch}
+            ${errorUserNameTaken}${errorPasswordMismatch}${errorMessage}
         </div>
         </form>
         <div class="signup-link">
